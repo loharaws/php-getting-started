@@ -2,16 +2,8 @@ FROM php:8.4-apache
 
 WORKDIR /var/www/html
 
-COPY . .
+COPY . /var/www/html
 
-RUN apt-get update && apt-get install -y \
-    unzip \
-    git \
-    libzip-dev \
-    && docker-php-ext-install zip
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-RUN composer install
+RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
