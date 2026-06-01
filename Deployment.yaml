@@ -1,47 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: phpapp-deployment
+  name: phpapp-deployment
 
 spec:
-replicas: 2
+  replicas: 2
 
-selector:
-matchLabels:
-app: phpapp
+  selector:
+    matchLabels:
+      app: phpapp
 
-template:
-metadata:
-labels:
-app: phpapp
+  template:
+    metadata:
+      labels:
+        app: phpapp
 
-```
-spec:
-  containers:
-  - name: phpapp
-    image: phpapp:latest
-    imagePullPolicy: IfNotPresent
-
-    ports:
-    - containerPort: 8081
-```
+    spec:
+      containers:
+      - name: phpapp
+        image: phpapp:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
 
 ---
-
 apiVersion: v1
 kind: Service
+
 metadata:
-name: phpapp-service
+  name: phpapp-service
 
 spec:
-type: NodePort
+  type: NodePort
 
-selector:
-app: phpapp
+  selector:
+    app: phpapp
 
-ports:
-
-* protocol: TCP
-  port: 8081
-  targetPort: 8081
-  nodePort: 30081
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+    nodePort: 30081
