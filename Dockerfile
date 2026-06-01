@@ -1,36 +1,28 @@
-FROM php:8.4-apache
+# Use official PHP image
+FROM php:8.3-cli
 
-WORKDIR /var/www/html
-
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     zip \
-    curl \
     libzip-dev \
-    libxml2-dev
+    && docker-php-ext-install zip
 
-RUN docker-php-ext-install zip dom
-
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set working directory
+WORKDIR /app
+
+# Copy application files
 COPY . .
 
-RUN composer install
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-RUN rm -f /var/www/html/index.html
+# Expose application port
+EXPOSE 8080
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/*.conf \
-    /etc/apache2/apache2.conf \
-    /etc/apache2/conf-available/*.conf
-
-RUN a2enmod rewrite
-
-RUN chown -R www-data:www-data /var/www/html
-
-RUN chmod -R 755 /var/www/html
-
-EXPOSE 80
+# Start Slim application
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
