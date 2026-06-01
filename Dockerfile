@@ -22,7 +22,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Expose application port
-EXPOSE 8080
+EXPOSE 8070
 
 # Start Slim application
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
