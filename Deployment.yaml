@@ -4,7 +4,7 @@ metadata:
   name: phpapp-deployment
 
 spec:
-  replicas: 2
+  replicas: 1
 
   selector:
     matchLabels:
@@ -18,8 +18,8 @@ spec:
     spec:
       containers:
       - name: phpapp
-        image: phpapp:latest
-        imagePullPolicy: IfNotPresent
+        image: yashwantlohar/phpapp
+        imagePullPolicy: Always
         ports:
         - containerPort: 8081
 
